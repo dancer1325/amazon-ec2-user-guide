@@ -1,19 +1,36 @@
 # Elastic network interfaces<a name="using-eni"></a>
 
-An *elastic network interface* is a logical networking component in a VPC that represents a virtual network card\. It can include the following attributes:
-+ A primary private IPv4 address from the IPv4 address range of your VPC
-+ One or more secondary private IPv4 addresses from the IPv4 address range of your VPC
-+ One Elastic IP address \(IPv4\) per private IPv4 address
-+ One public IPv4 address
-+ One or more IPv6 addresses
-+ One or more security groups
-+ A MAC address
-+ A source/destination check flag
-+ A description
+* **elastic network interface**
+  * := logical networking component | VPC /
+    * == virtual network card
+    * allowed attributes
+      + primary private IPv4 address / from your VPC's IPv4 address range 
+      + \>=1 secondary private IPv4 addresses / from your VPC's IPv4 address range
+      + 1 Elastic IP address \(IPv4\) / private IPv4 address
+      + 1 public IPv4 address
+      + \>=1 IPv6 addresses
+      + \>=1 security groups
+      + MAC address
+      + source/destination check flag
+      + description
+  * uses
+    * create
+    * configure
+    * attach them -- to -- instances | SAME Availability Zone
+    * detach if -- from an -- instance
+      * AFTERWARD, possible to attach -- to –– ANOTHER instance
+        * -> network traffic will be redirected
+  * term "network interface" | this documentation == ALWAYS "elastic network interface"\.
 
-You can create and configure network interfaces and attach them to instances in the same Availability Zone\. Your account might also have *requester\-managed* network interfaces, which are created and managed by AWS services to enable you to use other resources and services\. You cannot manage these network interfaces yourself\. For more information, see [Requester\-managed network interfaces](requester-managed-eni.md)\.
-
-This AWS resource is referred to as a *network interface* in the AWS Management Console and the Amazon EC2 API\. Therefore, we use "network interface" in this documentation instead of "elastic network interface"\. The term "network interface" in this documentation always means "elastic network interface"\.
+* **requester-managed network interfaces**
+  * := network interfaces / created & managed -- by -- AWS services
+    * IMPOSSIBLE to be managed -- by -- yourself
+    * enable you to
+      * use OTHER 
+        * resources
+        * services
+  * see [Requester\-managed network interfaces](requester-managed-eni.md)
+  * possible to exist | your AWS account
 
 **Topics**
 + [Network interface basics](#eni-basics)
@@ -26,12 +43,19 @@ This AWS resource is referred to as a *network interface* in the AWS Management 
 
 ## Network interface basics<a name="eni-basics"></a>
 
-You can create a network interface, attach it to an instance, detach it from an instance, and attach it to another instance\. The attributes of a network interface follow it as it's attached or detached from an instance and reattached to another instance\. When you move a network interface from one instance to another, network traffic is redirected to the new instance\.
-
 **Primary network interface**  
-Each instance has a default network interface, called the *primary network interface*\. You cannot detach a primary network interface from an instance\. You can create and attach additional network interfaces\. The maximum number of network interfaces that you can use varies by instance type\. For more information, see [IP addresses per network interface per instance type](#AvailableIpPerENI)\.
+* == default network interface / EACH instance
+* IMPOSSIBLE to detach -- from an -- instance
+
+**Additional network interfaces**
+* possible to
+  * create them 
+  * attach them 
+* #OfAllowedNetworkInterfaces -- depend on -- instance type
+  * see [IP addresses per network interface per instance type](#AvailableIpPerENI)
 
 **Public IPv4 addresses for network interfaces**  
+* TODO:
 In a VPC, all subnets have a modifiable attribute that determines whether network interfaces created in that subnet \(and therefore instances launched into that subnet\) are assigned a public IPv4 address\. For more information, see [Subnet settings](https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html#subnet-settings) in the *Amazon VPC User Guide*\. The public IPv4 address is assigned from Amazon's pool of public IPv4 addresses\. When you launch an instance, the IP address is assigned to the primary network interface that's created\.
 
 When you create a network interface, it inherits the public IPv4 addressing attribute from the subnet\. If you later modify the public IPv4 addressing attribute of the subnet, the network interface keeps the setting that was in effect when it was created\. If you launch an instance and specify an existing network interface as the primary network interface, the public IPv4 address attribute is determined by this network interface\.
