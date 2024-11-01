@@ -7,7 +7,7 @@
       + primary private IPv4 address / from your VPC's IPv4 address range 
       + \>=1 secondary private IPv4 addresses / from your VPC's IPv4 address range
       + 1 Elastic IP address \(IPv4\) / private IPv4 address
-      + 1 public IPv4 address
+      + 1 public IPv4 address / from Amazon's pool of public IPv4 addresses
       + \>=1 IPv6 addresses
       + \>=1 security groups
       + MAC address
@@ -55,45 +55,78 @@
   * see [IP addresses per network interface per instance type](#AvailableIpPerENI)
 
 **Public IPv4 addresses for network interfaces**  
-* TODO:
-In a VPC, all subnets have a modifiable attribute that determines whether network interfaces created in that subnet \(and therefore instances launched into that subnet\) are assigned a public IPv4 address\. For more information, see [Subnet settings](https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html#subnet-settings) in the *Amazon VPC User Guide*\. The public IPv4 address is assigned from Amazon's pool of public IPv4 addresses\. When you launch an instance, the IP address is assigned to the primary network interface that's created\.
-
-When you create a network interface, it inherits the public IPv4 addressing attribute from the subnet\. If you later modify the public IPv4 addressing attribute of the subnet, the network interface keeps the setting that was in effect when it was created\. If you launch an instance and specify an existing network interface as the primary network interface, the public IPv4 address attribute is determined by this network interface\.
-
-For more information, see [Public IPv4 addresses](using-instance-addressing.md#concepts-public-addresses)\.
+* attribute / VPC's subnets
+  * see [Subnet settings](https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html#subnet-settings)
+* if you launch an instance
+  * -> IP address -- is assigned to the -- primary network interface
+  * & specify an existing network interface -- as the -- primary network interface -> the public IPv4 address attribute -- is determined by -- this network interface\.
+* if you create a network interface -> it -- inherits the -- subnet's public IPv4 addressing attribute
+  * if afterward, you modify the subnet's public IPv4 addressing attribute -> the network interface keeps the setting / was | it was created
+* see [Public IPv4 addresses](using-instance-addressing.md#concepts-public-addresses)\.
 
 **Elastic IP addresses for network interface**  
-If you have an Elastic IP address, you can associate it with one of the private IPv4 addresses for the network interface\. You can associate one Elastic IP address with each private IPv4 address\.
-
-If you disassociate an Elastic IP address from a network interface, you can release it back to the address pool\. This is the only way to associate an Elastic IP address with an instance in a different subnet or VPC, as network interfaces are specific to subnets\.
+* -- can be associated with --
+    * one of the network interface's private IPv4 addresses
+    * EACH private IPv4 address
+* if you disassociate an Elastic IP address -- from a -- network interface -> you can release it back to the address pool
+  * -> -- can be associated with an -- instance | different subnet or VPC
+    * 👀ONLY possible way 👀
+    * Reason: 🧠 network interfaces -- are specific to -- subnets 🧠
 
 **IPv6 addresses for network interfaces**  
-If you associate IPv6 CIDR blocks with your VPC and subnet, you can assign one or more IPv6 addresses from the subnet range to a network interface\. Each IPv6 address can be assigned to one network interface\.
-
-All subnets have a modifiable attribute that determines whether network interfaces created in that subnet \(and therefore instances launched into that subnet\) are automatically assigned an IPv6 address from the range of the subnet\. For more information, see [Subnet settings](https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html#subnet-settings) in the *Amazon VPC User Guide*\. When you launch an instance, the IPv6 address is assigned to the primary network interface that's created\.
-
-For more information, see [IPv6 addresses](using-instance-addressing.md#ipv6-addressing)\.
+* requirements
+  * IPv6 CIDR blocks -- must be associated with your -- VPC & subnet
+* \>=1 IPv6 addresses / from the subnet range
+  * EACH IPv6 address -- can be assigned to -- 1 network interface
+* subnets have a modifiable attribute / determines whether network interfaces -- are automatically assigned an -- IPv6 address / from the range of the subnet\. 
+  * see [Subnet settings](https://docs.aws.amazon.com/vpc/latest/userguide/configure-subnets.html#subnet-settings)
+* if you launch an instance -> IPv6 address -- is assigned to the -- primary network interface
+* see [IPv6 addresses](using-instance-addressing.md#ipv6-addressing)
 
 **Prefix Delegation**  
- A Prefix Delegation prefix is a reserved private IPv4 or IPv6 CIDR range that you allocate for automatic or manual assignment to network interfaces that are associated with an instance\. By using Delegated Prefixes, you can launch services faster by assigning a range of IP addresses as a single prefix\. 
+* == reserved private IPv4 or IPv6 CIDR range / you allocate
+  * uses
+    * automatic or manual assignment to network interfaces / -- are associated with an -- instance
+  * allows
+    * launching services faster -- via -- assigning a range of IP addresses -- as a -- 1! prefix 
 
 **Termination behavior**  
-You can set the termination behavior for a network interface that's attached to an instance\. You can specify whether the network interface should be automatically deleted when you terminate the instance to which it's attached\.
+* uses
+  * | network interface / -- is attached to an -- instance
+* allows
+  * specifying, if you terminate the instance | it's attached -> network interface should be automatically deleted 
 
 **Source/destination checking**  
 You can enable or disable source/destination checks, which ensure that the instance is either the source or the destination of any traffic that it receives\. Source/destination checks are enabled by default\. You must disable source/destination checks if the instance runs services such as network address translation, routing, or firewalls\.
 
 **Monitoring IP traffic**  
-You can enable a VPC flow log on your network interface to capture information about the IP traffic going to and from a network interface\. After you've created a flow log, you can view and retrieve its data in Amazon CloudWatch Logs\. For more information, see [VPC Flow Logs](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html) in the *Amazon VPC User Guide*\.
+* requirements
+  * enable a VPC flow log | your network interface
+* VPC flow log
+  * capture information about the IP traffic /
+    * going
+      * to a network interface
+      * from a network interface
+    * can be viewed -- via -- Amazon CloudWatch Logs
+* see [VPC Flow Logs](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html)
 
 ## Network cards<a name="network-cards"></a>
 
-Instances with multiple network cards provide higher network performance, including bandwidth capabilities above 100 Gbps and improved packet rate performance\. Each network interface is attached to a network card\. The primary network interface must be assigned to network card index 0\.
+* instances / multiple network cards
+  * provide
+    * higher network performance,
+    * bandwidth capabilities > 100 Gbps
+    * improved packet rate performance
+* -- are attached to -- EACH network interface
+  * network card index 0 -- is assigned to -- primary network interface
 
-If you enable Elastic Fabric Adapter \(EFA\) when you launch an instance that supports multiple network cards, all network cards are available\. You can assign up to one EFA per network card\. An EFA counts as a network interface\.
+* Elastic Fabric Adapter \(EFA\)
+  * if you launch an instance / supports multiple network cards & enable EFA -> ALL network cards are available
+  * possible to assign < 1 EFA / network card
+  * counts == network interface
 
-The following instances support multiple network cards\. All other instance types support one network card\.
-
+* following instances
+  * 👀support multiple network cards 👀 
 
 | Instance type | Number of network cards | 
 | --- | --- | 
@@ -114,9 +147,13 @@ The following instances support multiple network cards\. All other instance type
 | trn1\.32xlarge | 8 | 
 | trn1n\.32xlarge | 16 | 
 
-## IP addresses per network interface per instance type<a name="AvailableIpPerENI"></a>
 
-The following tables list the maximum number of network interfaces per instance type, and the maximum number of private IPv4 addresses and IPv6 addresses per network interface\. The limit for IPv6 addresses is separate from the limit for private IPv4 addresses per network interface\. Not all instance types support IPv6 addressing\.
+* ALL other instance types
+  * support 1! network card
+
+## IP addresses / network interface / instance type<a name="AvailableIpPerENI"></a>
+
+* NOT ALL instance types -- support -- IPv6 addressing
 
 **Topics**
 + [General Purpose](#enis-generalpurpose)
@@ -128,7 +165,7 @@ The following tables list the maximum number of network interfaces per instance 
 ### General Purpose<a name="enis-generalpurpose"></a>
 
 
-| Instance type | Maximum network interfaces | Private IPv4 addresses per interface | IPv6 addresses per interface | 
+| Instance type | Maximum network interfaces | Maximum Private IPv4 addresses per interface | Maximum IPv6 addresses per interface | 
 | --- | --- | --- | --- | 
 | a1\.medium | 2 | 4 | 4 | 
 | a1\.large | 3 | 10 | 10 | 
@@ -325,7 +362,7 @@ The following tables list the maximum number of network interfaces per instance 
 ### Compute Optimized<a name="enis-computeoptimized"></a>
 
 
-| Instance type | Maximum network interfaces | Private IPv4 addresses per interface | IPv6 addresses per interface | 
+| Instance type | Maximum network interfaces | Maximum Private IPv4 addresses per interface | Maximum IPv6 addresses per interface | 
 | --- | --- | --- | --- | 
 | c1\.medium | 2 | 6 | IPv6 not supported | 
 | c1\.xlarge | 4 | 15 | IPv6 not supported | 
@@ -462,7 +499,7 @@ The following tables list the maximum number of network interfaces per instance 
 ### Memory Optimized<a name="enis-memoryoptimized"></a>
 
 
-| Instance type | Maximum network interfaces | Private IPv4 addresses per interface | IPv6 addresses per interface | 
+| Instance type | Maximum network interfaces | Maximum Private IPv4 addresses per interface | Maximum IPv6 addresses per interface | 
 | --- | --- | --- | --- | 
 | cr1\.8xlarge | 8 | 30 | IPv6 not supported | 
 | hpc6id\.32xlarge | 2 | 50 | 50 | 
@@ -672,7 +709,7 @@ The following tables list the maximum number of network interfaces per instance 
 ### Storage Optimized<a name="enis-storageoptimized"></a>
 
 
-| Instance type | Maximum network interfaces | Private IPv4 addresses per interface | IPv6 addresses per interface | 
+| Instance type | Maximum network interfaces | Maximum Private IPv4 addresses per interface | Maximum IPv6 addresses per interface | 
 | --- | --- | --- | --- | 
 | d2\.xlarge | 4 | 15 | 15 | 
 | d2\.2xlarge | 4 | 15 | 15 | 
@@ -742,7 +779,7 @@ The following tables list the maximum number of network interfaces per instance 
 ### Accelerated Computing<a name="enis-acceleratedcomputing"></a>
 
 
-| Instance type | Maximum network interfaces | Private IPv4 addresses per interface | IPv6 addresses per interface | 
+| Instance type | Maximum network interfaces | Maximum Private IPv4 addresses per interface | Maximum IPv6 addresses per interface | 
 | --- | --- | --- | --- | 
 | dl1\.24xlarge | 60 | 50 | 50 | 
 | f1\.2xlarge | 4 | 15 | 15 | 
@@ -826,6 +863,7 @@ aws ec2 describe-instance-types --filters "Name=instance-type,Values=c5.*" --que
 
 ## Work with network interfaces<a name="working-with-enis"></a>
 
+* TODO:
 You can work with network interfaces using the Amazon EC2 console or the command line\.
 
 **Topics**
