@@ -1,11 +1,33 @@
 # Amazon Elastic Block Store \(Amazon EBS\)<a name="AmazonEBS"></a>
 
-Amazon Elastic Block Store \(Amazon EBS\) provides block level storage volumes for use with EC2 instances\. EBS volumes behave like raw, unformatted block devices\. You can mount these volumes as devices on your instances\. EBS volumes that are attached to an instance are exposed as storage volumes that persist independently from the life of the instance\. You can create a file system on top of these volumes, or use them in any way you would use a block device \(such as a hard drive\)\. You can dynamically change the configuration of a volume attached to an instance\.
+* provides
+  * 👀block level storage volumes 👀
+    * == block devices
+      * raw
+      * unformatted 
+* uses
+  * \+ EC2 instances 
+    * == mount these volumes -- as -- devices | your instances
+    * 👀these EBS volumes are -- exposed as -- storage volumes / persist -- INDEPENDENTLY from the -- instance's life 👀
+    * create a file system | these volumes
+    * use them -- as a -- block device
+      * == hard drive
+    * enable
+      * DYNAMICALLY change the configuration of a volume
 
-We recommend Amazon EBS for data that must be quickly accessible and requires long\-term persistence\. EBS volumes are particularly well\-suited for use as the primary storage for file systems, databases, or for any applications that require fine granular updates and access to raw, unformatted, block\-level storage\. Amazon EBS is well suited to both database\-style applications that rely on random reads and writes, and to throughput\-intensive applications that perform long, continuous reads and writes\.
+* recommendations
+  * 💡use Amazon EBS -- for -- data 💡/ 
+    * MUST be quickly accessible
+      * _Example:_ applications / perform long, continuous reads & writes
+    * requires long\-term persistence\
+      * == database\-style applications / -- rely on -- RANDOM reads and writes 
+  * 💡EBS volumes as primary storage -- for -- file systems, databases, OR applications / require
+    * fine granular updates
+    * access to raw, unformatted, block\-level storage
 
-With Amazon EBS, you pay only for what you use\. For more information about Amazon EBS pricing, see the Projecting Costs section of the [Amazon Elastic Block Store page](http://aws.amazon.com/ebs/)\.
-
+* pay ONLY for what you use
+  * see [pricing](http://aws.amazon.com/ebs/)
+     
 **Topics**
 + [Features of Amazon EBS](#ebs-features)
 + [Amazon EBS volumes](ebs-volumes.md)
@@ -20,6 +42,7 @@ With Amazon EBS, you pay only for what you use\. For more information about Amaz
 + [Amazon EBS quotas](ebs-resource-quotas.md)
 
 ## Features of Amazon EBS<a name="ebs-features"></a>
+* TODO:
 + You create an EBS volume in a specific Availability Zone, and then attach it to an instance in that same Availability Zone\. To make a volume available outside of the Availability Zone, you can create a snapshot and restore that snapshot to a new volume anywhere in that Region\. You can copy snapshots to other Regions and then restore them to new volumes there, making it easier to leverage multiple AWS Regions for geographical expansion, data center migration, and disaster recovery\.
 + Amazon EBS provides the following volume types: General Purpose SSD, Provisioned IOPS SSD, Throughput Optimized HDD, and Cold HDD\. For more information, see [EBS volume types](ebs-volume-types.md)\.
 
